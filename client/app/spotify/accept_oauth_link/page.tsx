@@ -1,11 +1,18 @@
 "use client"
 
 import { useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { sign_in_user_by_spotify_token } from '@/database/User'
 
 const page = () => {
   const searchParams = useSearchParams()
   const code = searchParams.get('code')
+
+  useEffect(() => {
+    if (code) {
+      sign_in_user_by_spotify_token(code)
+    }
+  },[code])
 
   return (
     <div>
