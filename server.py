@@ -57,24 +57,10 @@ def getProfile(token):
     return str(response)
 
 
-#================================
 
 @app.route('/getAccessToken', methods=['GET'])
 def getAccessToken():
     code = request.args.get('code', type=str, default="")
-    authOptions = {
-        "url": 'https://accounts.spotify.com/api/token',
-        "form": {
-            "code": code,
-            "redirect_uri": "http://localhost:3000/spotify/accept_oauth_link",
-            "grant_type": 'authorization_code'
-        },
-        "headers": {
-        'content-type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8")
-        },
-        "json": True
-    }
 
     headers = {
         'content-type': 'application/x-www-form-urlencoded',
@@ -91,39 +77,6 @@ def getAccessToken():
     response = json.loads(response.content.decode('utf-8'))
     return str(response)
 
-
-#===============================
-
-@app.route('/refresh_token/<token>', methods=['GET'])
-def getRefreshToken(token):
-
-    url = "https://api.spotify.com/api/token?"
-    
-    URLSearchParams = {
-        "grant_type": 'authorization_code',
-        "code": token,
-        "redirect_uri": "http://localhost:3000/spotify/accept_oauth_link"
-    }
-
-    payload = {
-      "method": 'POST',
-      "headers": {
-        "Authorization": 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8"),
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      "body": url+urlencode(URLSearchParams)
-    }
-
-    headers = {
-        "Authorization": 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8"),
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-
-    response = requests.post(url = url, data = payload, headers=headers)
-    print(response.reason)
-    print(response.content)
-
-    return str(response)
 
 if __name__ == '__main__':
     app.run(host='localhost', port = 5000)
