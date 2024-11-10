@@ -33,19 +33,20 @@ const AddMember = ({jam_id}:any) => {
         const updatedJam = {...currentJam, Members: newMembers}
 
         await updateJamSession(jam_id, updatedJam)
+        window.location.reload()
     }
 
 
 
     return (
-        <div>
+        <div className='w-fit ml-auto flex gap-5'>
             <select onChange={(e: any) => setSelectedUser(e.target.value)}>
                 <option value="">Select a user</option>
                 {users.map((user) => (
                     <option key={user.id} value={user.id}>{user.id}</option>
                 ))}
             </select>
-            <button onClick={addMember}>Add Member To Jam</button>
+            <button onClick={addMember} className='bg-[var(--foreground)] hover:bg-gray-700 text-white w-fit ml-auto p-3 rounded-lg m-3 flex items-center gap-5'>Add Member To Jam</button>
         </div>
     );
 }

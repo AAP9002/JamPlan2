@@ -9,7 +9,6 @@ import GeminiResponse from '@/app/components/GeminiResponse'
 const page = () => {
   const [loading, setLoading] = useState<boolean>(true)
 
-
   const searchParams = useSearchParams()
  
   const jam_id:any = searchParams.get('jam_id')
@@ -32,16 +31,19 @@ const page = () => {
   }
 
   return ( 
-    <div>
-      {currentJam?.Name}
+    <div className='p-10 m--10 max-w-[1100px] mx-auto'>
+      <p className='font-bold text-4xl'>{currentJam?.Name}</p>
       <AddMember jam_id={jam_id}/>
-      {currentJam?.Members.map((member) => {
-        return (
-          <div key={member}>
-            {member}
-          </div>
-        )
-      })}
+      <div className='flex gap-5 pb-5'>
+        {currentJam?.Members.map((member) => {
+          return (
+            <div key={member} className='bg-slate-600 p-2 rounded text-white '>
+              {member}
+            </div>
+          )
+        })}
+      </div>
+      
 
       <GeminiResponse users={currentJam?.Members?currentJam?.Members:[]}/>
 
