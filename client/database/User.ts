@@ -1,5 +1,6 @@
 import { db } from '@/lib/firebase/config';
-import { setDoc, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { setDoc, doc, getDoc, getDocs, updateDoc, deleteDoc, where } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 
 
 // Define a user type
@@ -9,6 +10,9 @@ type User = {
   spotify_token: string;
   email?: string;
   createdAt: Date;
+  song_list_short_term?: string;
+  song_list_medium_term?: string;
+  song_list_long_term?: string;
 };
 
 // Create a new user document
@@ -36,6 +40,26 @@ export const getUser = async (userId: string): Promise<User | null> => {
     return null;
   }
 };
+
+
+export const getUserBySpotifyToken = async (spotify_token: string): Promise<User | null> => {
+  try {
+    const userQuery = query(collection(db, 'users'), where('spotify_token', '==', spotify_token));
+    const querySnapshot = await getDocs(userQuery);
+
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0]; // Get the first document if multiple found
+      return userDoc.data() as User;
+    } else {
+      console.log('User not found');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return null;
+  }
+};
+
 
 // Update user document
 export const updateUser = async (userId: string, data: Partial<User>) => {

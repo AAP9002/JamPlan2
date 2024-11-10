@@ -41,7 +41,7 @@ const page = () => {
 
     const res_id = await req_id.json()
 
-    sign_in_user_by_spotify_token(res.access_token, res_id.id)
+    await sign_in_user_by_spotify_token(res.access_token, res_id.id)
     setSessionUserIdClient(res.access_token)
     setLoading(false)
     window.location.href = '/profile'

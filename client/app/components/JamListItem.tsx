@@ -7,7 +7,7 @@ const JamListItem = ({name, member_count, date_created, link}:any) => {
         <div>
             <p className='font-bold text-lg'>{name}</p>
             <p>Members: {member_count}</p>
-            <p>Created: {date_created} days ago</p>
+            <p>Created: {date_created}</p>
         </div>
         <div>
             <Link href={link} className='bg-[var(--foreground)] hover:bg-gray-700 text-white p-2 rounded-lg h-full flex gap-5 items-center'>
