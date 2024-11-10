@@ -9,6 +9,15 @@ const page = () => {
   const searchParams = useSearchParams()
   const code = searchParams.get('code')
 
+  const get_refresh_token = async (code: string) => {
+    const req = await fetch(`/api/accept_oauth_link/${code}`, {
+      method: 'POST'
+    })
+
+    const res = await req.json()
+    console.log(res)
+  }
+
   useEffect(() => {
     if (code) {
       sign_in_user_by_spotify_token(code)
