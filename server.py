@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect
+from flask import Flask, jsonify, redirect, request
 from dotenv import load_dotenv, dotenv_values 
 import os
 import random
@@ -6,10 +6,12 @@ import string
 from urllib.parse import urlencode
 import requests
 import json
+import base64
 
 app = Flask(__name__)
 load_dotenv(".env.local") #import .env variables
 client_id = os.getenv("CLIENT_ID")
+client_secret = os.getenv("CLIENT_SECRET")
 
 @app.route('/authenticate', methods=['GET'])
 def authenticateSpotify():
@@ -24,7 +26,7 @@ def authenticateSpotify():
    
     return redirect(location =('https://accounts.spotify.com/authorize?' + urlencode(parameters)))
 
-@app.route('/get50', methods=['GET'])
+@app.route('/get50/<token>', methods=['GET'])
 def getTop50(token):
 
     url = "https://api.spotify.com/v1/me/top/tracks?"
@@ -44,8 +46,84 @@ def getTop50(token):
     return str(tracksList)
 
 
+@app.route('/get_user_profile/<token>', methods=['GET'])
+def getProfile(token):
+    url = "https://api.spotify.com/v1/me?"
+    headers = {
+    "Authorization": f"Bearer {token}"
+    }   
+    response = requests.get(url, headers=headers)
+    response = json.loads(response.content.decode('utf-8'))
+    return str(response)
 
 
+#================================
+
+@app.route('/getAccessToken', methods=['GET'])
+def getAccessToken():
+    code = request.args.get('code', type=str, default="")
+    authOptions = {
+        "url": 'https://accounts.spotify.com/api/token',
+        "form": {
+            "code": code,
+            "redirect_uri": "http://localhost:3000/spotify/accept_oauth_link",
+            "grant_type": 'authorization_code'
+        },
+        "headers": {
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8")
+        },
+        "json": True
+    }
+
+    headers = {
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8")
+        }
+    payload = {
+    'grant_type': 'authorization_code',
+    'code': code,
+    'redirect_uri': "http://localhost:3000/spotify/accept_oauth_link"
+    }
+
+    response = requests.post(url = "https://accounts.spotify.com/api/token", data = payload, headers=headers)
+
+    response = json.loads(response.content.decode('utf-8'))
+    return str(response)
+
+
+#===============================
+
+@app.route('/refresh_token/<token>', methods=['GET'])
+def getRefreshToken(token):
+
+    url = "https://api.spotify.com/api/token?"
+    
+    URLSearchParams = {
+        "grant_type": 'authorization_code',
+        "code": token,
+        "redirect_uri": "http://localhost:3000/spotify/accept_oauth_link"
+    }
+
+    payload = {
+      "method": 'POST',
+      "headers": {
+        "Authorization": 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8"),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      "body": url+urlencode(URLSearchParams)
+    }
+
+    headers = {
+        "Authorization": 'Basic ' + base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8"),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+
+    response = requests.post(url = url, data = payload, headers=headers)
+    print(response.reason)
+    print(response.content)
+
+    return str(response)
 
 if __name__ == '__main__':
     app.run(host='localhost', port = 5000)
