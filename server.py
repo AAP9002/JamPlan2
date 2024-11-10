@@ -46,6 +46,44 @@ def getTop50(token):
 
     return tracksList
 
+@app.route('/get50Medium/<token>', methods=['GET'])
+def getTop50Medium(token):
+
+    url = "https://api.spotify.com/v1/me/top/tracks?"
+    parameters = {
+        "time_range": "medium_term",
+        "limit": 50
+    }
+    headers = {
+    "Authorization": f"Bearer {token}"
+    }
+
+    response = requests.get(url+urlencode(parameters), headers=headers, params=parameters) 
+    tracksList = json.loads(response.content.decode('utf-8'))
+
+    #track_names = [item["name"] for item in tracksList["items"]]
+
+    return tracksList
+
+@app.route('/get50Long/<token>', methods=['GET'])
+def getTop50Long(token):
+
+    url = "https://api.spotify.com/v1/me/top/tracks?"
+    parameters = {
+        "time_range": "long_term",
+        "limit": 50
+    }
+    headers = {
+    "Authorization": f"Bearer {token}"
+    }
+
+    response = requests.get(url+urlencode(parameters), headers=headers, params=parameters) 
+    tracksList = json.loads(response.content.decode('utf-8'))
+
+    #track_names = [item["name"] for item in tracksList["items"]]
+
+    return tracksList
+
 
 @app.route('/get_user_profile/<token>', methods=['GET'])
 def getProfile(token):
