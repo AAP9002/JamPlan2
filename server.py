@@ -4,6 +4,8 @@ import os
 import random
 import string
 from urllib.parse import urlencode
+import requests
+import json
 
 app = Flask(__name__)
 load_dotenv(".env.local") #import .env variables
@@ -23,11 +25,23 @@ def authenticateSpotify():
     return redirect(location =('https://accounts.spotify.com/authorize?' + urlencode(parameters)))
 
 @app.route('/get50', methods=['GET'])
-def getTop50():
+def getTop50(token):
 
-    output = {"tmp":"TODO"}
+    url = "https://api.spotify.com/v1/me/top/tracks?"
+    parameters = {
+        "time_range": "short_term",
+        "limit": 50
+    }
+    headers = {
+    "Authorization": f"Bearer {token}"
+    }
 
-    return jsonify(output)
+    response = requests.get(url+urlencode(parameters), headers=headers, params=parameters) 
+    tracksList = json.loads(response.content.decode('utf-8'))
+
+    #track_names = [item["name"] for item in tracksList["items"]]
+
+    return str(tracksList)
 
 
 
