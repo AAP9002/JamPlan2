@@ -16,14 +16,11 @@ def authenticateSpotify():
         "response_type": 'code',
         "client_id": client_id,
         "scope": 'user-read-private user-read-email',
-        "redirect_uri": "http://localhost:3000",
-        "state": "1111111111111111"#''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(16))
+        "redirect_uri": "http://localhost:3000/spotify/accept_oauth_link",
+        "state": ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(16))
     }
    
     return redirect(location =('https://accounts.spotify.com/authorize?' + urlencode(parameters)))
-    output = {"tmp":"TODO"}
-
-    return jsonify(output)
 
 @app.route('/get50', methods=['GET'])
 def getTop50():
