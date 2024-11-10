@@ -41,6 +41,26 @@ export const getUser = async (userId: string): Promise<User | null> => {
   }
 };
 
+export const getAllUsers = async (): Promise<User[]> => {
+  try {
+    const userQuery = query(collection(db, 'users'));
+    const querySnapshot = await getDocs(userQuery);
+    const users: User[] = [];
+
+    querySnapshot.forEach((doc) => {
+      users.push(doc.data() as User);
+    });
+
+    console.log('Users fetched successfully');
+    console.log(users);
+
+    return users;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+}
+
 
 export const getUserBySpotifyToken = async (spotify_token: string): Promise<User | null> => {
   try {

@@ -92,7 +92,7 @@ def getProfile(token):
     "Authorization": f"Bearer {token}"
     }   
     response = requests.get(url, headers=headers)
-    response = json.loads(response.content.decode('utf-8'))
+    response = response.content.decode('utf-8')
     return response
 
 

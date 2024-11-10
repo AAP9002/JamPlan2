@@ -3,6 +3,7 @@
 import { getJamSession, JamSession } from '@/database/JamSession'
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import AddMember from '@/app/components/AddMember'
 
 const page = () => {
   const searchParams = useSearchParams()
@@ -24,7 +25,7 @@ const page = () => {
   return ( 
     <div>
       {currentJam?.Name}
-      <div>Add New Member</div>
+      <AddMember jam_id={jam_id}/>
       {currentJam?.Members.map((member) => {
         return (
           <div key={member}>
