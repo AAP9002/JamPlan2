@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 import requests
 import json
 import base64
+import aiResponse
 
 app = Flask(__name__)
 load_dotenv(".env.local") #import .env variables
@@ -77,10 +78,12 @@ def getAccessToken():
     response = json.loads(response.content.decode('utf-8'))
     return str(response)
 
-@app.route('/getAI', methods=['GET'])
-def getAIResponse():
-    print("TODO")
-    return "Tmp response"
+@app.route('/getAI/<inputList>', methods=['GET'])
+def getAIResponse(inputList):
+        
+    prompt = "Put your DEFAULT prompt here" + str(inputList)
+    output = aiResponse.generateResponse(prompt)
+    return output
 
 if __name__ == '__main__':
     app.run(host='localhost', port = 5000)
