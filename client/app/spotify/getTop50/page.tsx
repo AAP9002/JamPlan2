@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { getSessionUserIdClient } from '@/lib/session/userSession'
+import SongItem from '@/app/components/SongItem'
 
 
 const page = () => {
@@ -17,6 +18,7 @@ const page = () => {
         console.log(req)
 
         const res = await req.json()
+        console.log(res)
         setResult(res)
     }
 
@@ -25,7 +27,14 @@ const page = () => {
     },[])
   return (
     <div>
-        {result}
+        {result && result.items.map((track: any) => {
+            return (
+                <div key={track.id}>
+                    <SongItem image_uri={track.album.images[0].url} name={track.name} artist={track.artists[0].name} />
+                </div>
+            )
+        })
+    }
     </div>
   )
 }

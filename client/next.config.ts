@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  images: {
+    domains: ['i.scdn.co'],
+  },
 };
 
 
