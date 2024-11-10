@@ -20,7 +20,7 @@ def authenticateSpotify():
     parameters = {
         "response_type": 'code',
         "client_id": client_id,
-        "scope": 'user-top-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-read-private user-read-email',
+        "scope": 'user-top-read user-read-private user-read-email',
         "redirect_uri": "http://localhost:3000/spotify/accept_oauth_link",
         "state": "1111111111111111"#''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(16))
     }

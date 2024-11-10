@@ -57,7 +57,7 @@ export const deleteUser = async (userId: string) => {
   }
 };
 
-export const sign_in_user_by_spotify_token = async (spotify_token: string) => {
+export const sign_in_user_by_spotify_token = async (spotify_token: string, id:string) => {
     const user = await getDoc(doc(db, 'users', spotify_token));
 
     if (user.exists()) {
@@ -65,7 +65,7 @@ export const sign_in_user_by_spotify_token = async (spotify_token: string) => {
     } else {
         // create new user
         const new_user: User = {
-            id: spotify_token,
+            id: id,
             spotify_token: spotify_token,
             createdAt: new Date()
         }

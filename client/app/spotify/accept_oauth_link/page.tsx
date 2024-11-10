@@ -33,7 +33,15 @@ const page = () => {
       return
     }
 
-    sign_in_user_by_spotify_token(res.access_token)
+    const req_id = await fetch(`/api/get_user_profile/${res.access_token}`, {
+      method: 'GET'
+    })
+
+    console.log(req)
+
+    const res_id = await req_id.json()
+
+    sign_in_user_by_spotify_token(res.access_token, res_id.id)
     setSessionUserIdClient(res.access_token)
     setLoading(false)
     window.location.href = '/profile'
