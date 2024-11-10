@@ -94,17 +94,21 @@ def getAIResponse(input):
     timeframe2 = input['time frame 2'] #6 months
     timeframe3 = input['time frame 3'] #1 year
 
-    History = "Over the last 4 weeks the group has listened to {timeframe1}. "\
-        "Over the last 6 months the group has listened to {timeframe2}. "\
-        "Over the last year the group has listened to {timeframe3}. "
+    History = f'Over the last 4 weeks the group has listened to {timeframe1}. '\
+        f'Over the last 6 months the group has listened to {timeframe2}. '\
+        f'Over the last year the group has listened to {timeframe3}. '
     
-    prompt = "You are an analyst whos job is to summarize how a group of music peoples taste overlaps over a period of time. "\
-        "You should focus on the common ground as well as differences between people, espeically how it varies as time passes. "\
-        "Use the historic listening data made available to you: {History}"
-    
+    prompt1 = f'You are an analyst whos job is to summarize how a group of music peoples taste overlaps over a period of time. You must use only plain text. You must answer in less than 150 words. '\
+        f'You should focus on the common ground as well as differences between people, espeically how it varies as time passes. '\
+        f'Use the historic listening data made available to you: {History}'
+    output1 = aiResponse.generateResponse(prompt1)
 
-    output = aiResponse.generateResponse(prompt)
-    return output
+    #use generated summary of intrests to reccomend songs. This is seperated so the model can focus on the tasks seperatly for better performance
+
+    prompt2 = f'You are a summarizer who will reccomend songs that should be played by the group in a jam session. You must use only plain text. You must answer in less than 150 words. '\
+        f'You have a summary of the groups musical interests and how they change overtime that you can use as information about the group: [{output1}] '
+    output2 = aiResponse.generateResponse(prompt2)
+    return output2
 
 if __name__ == '__main__':
     app.run(host='localhost', port = 5000)
