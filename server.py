@@ -77,6 +77,10 @@ def getAccessToken():
     response = json.loads(response.content.decode('utf-8'))
     return str(response)
 
+@app.route('/getAI', methods=['GET'])
+def getAIResponse():
+    print("TODO")
+    return "Tmp response"
 
 if __name__ == '__main__':
     app.run(host='localhost', port = 5000)
